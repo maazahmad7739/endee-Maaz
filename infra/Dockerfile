@@ -12,11 +12,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
     cmake \
-    clang \
+    clang-19 \
     build-essential \
     libssl-dev \
     libcurl4-openssl-dev \
     unzip \
+    dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build_space
@@ -32,7 +33,8 @@ ARG BUILD_ARCH
 ENV BUILD_ARCH=${BUILD_ARCH}
 ARG DEBUG=false
 ENV DEBUG=${DEBUG}
-RUN chmod +x ./install.sh && \
+RUN dos2unix ./install.sh && \
+    chmod +x ./install.sh && \
     if [ "$DEBUG" = "true" ]; then \
         ./install.sh --${BUILD_ARCH} --debug_all --skip-deps; \
     else \
